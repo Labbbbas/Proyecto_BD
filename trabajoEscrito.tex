@@ -1,0 +1,117 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{xcolor} % Agrega esta línea al preámbulo del documento
+
+\title{Proyecto Final}
+\author{Badillo Aguilar Diego \and Jimenez Hernández Diana \and Labastida Vázquez Fernando \and Salgado Valdés Andrés}
+\date{12 de Abril, 2023}
+\begin{document}
+
+\maketitle
+
+\section*{Introducción: Analisis del problema}
+El problema consiste en diseñar una base de datos para una cadena de papelerías que busca innovar la forma en que almacena su información. Se requiere desarrollar sistemas informáticos que cumplan con los siguientes requerimientos:
+\begin{itemize}
+\item Almacenamiento de datos de proveedores: Se deben almacenar datos como la razón social, domicilio, nombre y teléfonos de los proveedores. Además, se debe incluir el Registro Federal de Contribuyentes (RFC) de cada proveedor.
+
+\item Almacenamiento de datos de clientes: Se debe almacenar información de los clientes, como su nombre, domicilio y al menos un correo electrónico.
+
+\item Inventario de productos: Es necesario tener un inventario de los productos que se venden en la papelería. Para cada producto, se debe almacenar el código de barras, el precio al que fue comprado, una foto, la fecha de compra y la cantidad de ejemplares en la bodega (stock).
+
+\item Regalos, artículos de papelería, impresiones y recargas: Se deben almacenar datos de los regalos, artículos de papelería, impresiones y recargas que se venden en la papelería. Sin embargo, estos datos solo deben ser guardados si existe un registro correspondiente en el inventario de productos. Para cada artículo, se deben guardar la marca, descripción y precio.
+
+\item Datos de ventas: Es necesario almacenar información de cada venta realizada en la papelería. Para cada venta, se debe guardar el número de venta, la fecha de venta y la cantidad total a pagar. Además, se debe almacenar la cantidad de cada artículo vendido y el precio total a pagar por cada artículo.
+\end{itemize}
+
+
+
+
+\section*{Plan de trabajo}
+Diseño la dianis
+Mer el andresito pro
+Normalizacion el fernanflo
+implementacion botana el sucio
+\section*{Diseño}
+\begin{itemize}
+\item Análisis de requerimientos ¿Para que?
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{analisisEnunciado.jpg}
+  \caption{Analisis del enunciado con los requerimientos}
+  \label{fig:modeloconceptual}
+\end{figure}
+    \begin{itemize}
+    \item \textbf{Ubicar sustantivos}
+        \begin{itemize}
+        \item[--] Para qué
+        \end{itemize}
+    \item \textbf{Caracteristicas o propiedades de los sustantivos}
+        \begin{itemize}
+        \item[--] Para qué
+        \end{itemize}
+    \item \textbf{Identificar verbos entre sustantivos}
+        \begin{itemize}
+        \item[--] Para qué
+        \end{itemize}
+    \item {Aunque estos pasos son opcoionales nos ayudaron a mitigar errores}
+
+    \end{itemize}
+
+\item Modelo conceptual -- ¿Cómo? (MER DER)
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{modeloConceptual.jpg}
+  \caption{Modelo conceptual}
+  \label{fig:modeloconceptual}
+\end{figure}
+
+Aqui va la explicacion del modelo conceptual
+
+\item \textbf{Modelo lógico (MR)}
+\begin{itemize}
+    \item \textbf{PROVEEDOR} (\underline{id\_proveedor} varchar(13) PK, razón\_social varchar(100), nombre\_proveedor varchar(70), ap\_pat\_proveedor varchar(50), ap\_mat\_proveedor varchar(50) (N), calle varchar(60), num varchar(10), cp smallint, ciudad varchar(70))
+    
+    \item \textbf{Teléfono} (\underline{teléfono} bigint (PK), \underline{id\_proveedor} varchar(13) FK)
+    
+    \item \textbf{INVENTARIO} (\underline{cod\_barras} varchar(20) PK, foto bytea, cantidad int (C))
+    
+    \item \textbf{CLIENTE} (\underline{RFC} varchar(13) PK, nombre\_cliente varchar(70), ap\_pat\_cliente varchar(50), ap\_Mat\_cliente varchar(50) (N), calle\_cliente varchar(60), num\_cliente varchar(10), cp\_cliente smallint, ciudad\_cliente varchar(70))
+    
+    \item \textbf{EMAIL} (\underline{email} varchar(150) (PK), \underline{RFC} varchar(13) FK)
+    
+    \item \textbf{VENTA} (\underline{num\_venta} int PK, fecha date, total money, \underline{RFC} varchar(13) FK)
+    
+    \item \textbf{ARTICULO} (\underline{clave} int PK, precio money, marca varchar(50), descripción varchar(100), \underline{cod\_barras} varchar(20) FK, tipo\_articulo varchar(1))
+\end{itemize}
+
+\textbf{RELACIONES}
+
+\begin{itemize}
+    \item \textbf{PROVEE} ((\underline{id\_proveedor} varchar(13), \underline{cod\_barrras} varchar(20)) FK, PK, fecha date, precio\_compra money)
+    
+    \item \textbf{Tiene} ((\underline{num\_venta} int, \underline{clave} int) FK, PK, precio money, cantidad int)
+\end{itemize}
+
+\item Por qué este método?
+\begin{itemize}
+    \item Podemos ver que los subtipos de la tabla ARTICULO no tienen atributos adicionales y existe una exclusión parcial entre ellos. La solución más adecuada sería utilizar una relación de exclusión en lugar de tablas separadas para los subtipos.
+    \item Con esta estructura podemos ver que el atributo tipo\_articulo servirá para saber a qué subtipo pertenece: pondremos R de regalo, P de papelería, I de impresión y R de recarga.
+    \item En cuanto a las relaciones PROVEE y TIENE, al ser muchos a muchos, se crea una nueva relación que tendrá como PK las PKs de las entidades que une (que a su vez pasarán como FKs), más los atributos de la relación.
+    \item Para las relaciones de 1 a muchos o muchos a 1, debemos llevar la PK de la cardinalidad 1 como FK a la de cardinalidad M.
+\end{itemize}
+
+\end{itemize}
+
+
+\section*{Implementación(Modelo fisico)}
+En esta sección se detalla la implementación del proyecto. Se describen las herramientas y tecnologías utilizadas, los problemas encontrados y las soluciones propuestas. También se puede incluir código relevante si es necesario.
+
+\section*{Presentación}
+En esta sección se presenta el proyecto en su forma final. Se pueden incluir capturas de pantalla, resultados obtenidos o cualquier otra forma de mostrar el producto final o los avances logrados.
+
+\section*{Conclusiones}
+En esta sección se presentan las conclusiones y lecciones aprendidas durante la realización del proyecto. Se pueden discutir los logros alcanzados, las dificultades encontradas y las recomendaciones para trabajos futuros relacionados con el proyecto.
+
+\end{document}
+
